@@ -1,0 +1,21 @@
+#!/bin/bash
+BINDIR=$(dirname "$(readlink -f $0)")
+
+print_usage(){
+cat $BINDIR/README.md
+}
+
+if [ -z "$1" ]
+then
+    print_usage
+    exit 1
+fi
+
+DESTINATION="$1"
+
+COMMIT=$(git log --pretty=oneline HEAD..$DESTINATION | tail -n 1 | cut -d ' ' -f 1)
+MESSAGE=$(git log --pretty=oneline HEAD..$DESTINATION | tail -n 1 | cut -d ' ' -f 2-)
+
+echo "On our way to $DESTINATION..."
+echo "Next stop: $COMMIT $MESSAGE"
+git checkout $COMMIT
